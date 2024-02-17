@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/VK-Ampah/QAP2_httpServer#readme",
   "dependencies": {
+    "openweather-apis": "^4.5.0",
     "uuid": "^9.0.1"
   }
 }

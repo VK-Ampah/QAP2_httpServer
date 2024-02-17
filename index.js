@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
+const weather = require('openweather-apis');
 // function to read the content of the file and return the response to client
 const readFileContent = require('./readPages').readFileContent;
 
@@ -10,22 +11,32 @@ const HOST = 'localhost';
 const Logger = require('./logging');// this logger class extends the event emitter class
 const logger = new Logger();
 
-//Register an event listener to listen for file read
+// set the parameters for the weather api for St Johns, CA
+weather.setLang('en');
+weather.setCity('St. Johns, CA');
+weather.setUnits('metric');
+weather.setAPPID('f77ee3fe25588bcfe0b6eab6ec3f3af6');
+
+weather.getAllWeather(function(err, data){
+    console.log('Displaying weather data for St. Johns, CA:\n');
+    console.log(data);
+});
+
+//Register an event listener to listen for file read and log event details to the console and log file
 logger.on('fileRead', (args)=>{
-    console.log('File is read');
+    console.log('File read successfully');
     logger.log(args);
     
 })
-//
-//Register an event listener to listen for file error event
+
+//Register an event listener to listen for error when reading file and log event details to the console and log file
 logger.on('fileError', (args)=>{
-    console.log('File error');
+    console.log('Error reading file');
     logger.log(args);
   
 })
 
-
-let eventId = uuid.v4();
+// set base directory for the views
 let baseDir = path.join(__dirname, './views/');
 // console.log(baseDir);
 
@@ -34,7 +45,15 @@ const server = http.createServer((req, res) => {
   // let eventMeataData;
   let file;  
   switch (req.url) {
-
+      case '/':
+        // Get data from weather api AND PASS IT TO THE readFileContent FUNCTION to write to the response
+        weather.getAllWeather(function(err, data){
+          if (err){console.log(err); return;}
+          readFileContent(baseDir + 'index.html', res, req,logger, data);         
+          // console.log(data);
+      });       
+        console.log('home page')
+        break;
       case '/about':
         file = baseDir + 'about.html';
         // console.log(file)
@@ -52,10 +71,6 @@ const server = http.createServer((req, res) => {
       case '/subscribe':
         readFileContent(baseDir + 'subscribe.html', res,req, logger);
         console.log('subscribe page')
-        break;
-      case '/':
-        readFileContent(baseDir + 'index.html', res, req,logger);
-        console.log('home page')
         break;
       default:
         res.writeHead(404, {'Content-Type': 'text/html'});
