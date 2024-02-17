@@ -46,6 +46,13 @@ let baseDir = path.join(__dirname, './views/');
 
 // create a server object with multi routes
 const server = http.createServer((req, res) => {
+  // favicon.ico request is made by the browser to get the icon for the website
+  if (req.url === '/favicon.ico') {
+    res.writeHead(200, {'Content-Type': 'image/x-icon'} );
+    res.end();
+    console.log('favicon requested');
+    return;
+  }
   // let eventMeataData;
   let file;  
   switch (req.url) {
