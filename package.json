@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/VK-Ampah/QAP2_httpServer/issues"
   },
-  "homepage": "https://github.com/VK-Ampah/QAP2_httpServer#readme"
+  "homepage": "https://github.com/VK-Ampah/QAP2_httpServer#readme",
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
 }
