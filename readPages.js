@@ -4,9 +4,7 @@ const uuid = require('uuid');
 
 
 // function to read the content of the file and return the response to client
-
-// pass an optional weather parameter to the function to read weather data on home page
-
+// pass an optional weather parameter to the function to read weather data on home page with a defualt value of null
 const readFileContent = (file,res,req,logger, weather = null) => {
     fs.readFile(file, (err, data) => {
       if (err) {
@@ -36,7 +34,7 @@ const readFileContent = (file,res,req,logger, weather = null) => {
         res.write(data);
         if (weather) {
             // weather = JSON.stringify(weather, null, 2);
-            
+            // write weather data to the response
             res.write(`<p><b>City:</b> ${weather.name}</p>`);
             res.write(`<p><b>Weather description:</b> ${JSON.stringify(weather.weather,null,4)}</p>`);
             res.write(`<p><b>Main:</b> ${JSON.stringify(weather.main,null,4)}</p>`);
@@ -48,7 +46,6 @@ const readFileContent = (file,res,req,logger, weather = null) => {
       }
     });
 }
-
     // module.exports = readFileContent;
 module.exports = { readFileContent }; //This will export the log function to be used in other files
 

@@ -5,10 +5,13 @@ const uuid = require('uuid');
 const weather = require('openweather-apis');
 // function to read the content of the file and return the response to client
 const readFileContent = require('./readPages').readFileContent;
+const Logger = require('./logging');// this logger class extends the event emitter class
 
+//set server parameters
 const PORT = 3000;
 const HOST = 'localhost';
-const Logger = require('./logging');// this logger class extends the event emitter class
+
+// create an instance of the logger class
 const logger = new Logger();
 
 // set the parameters for the weather api for St Johns, CA
@@ -17,10 +20,11 @@ weather.setCity('St. Johns, CA');
 weather.setUnits('metric');
 weather.setAPPID('f77ee3fe25588bcfe0b6eab6ec3f3af6');
 
-weather.getAllWeather(function(err, data){
-    console.log('Displaying weather data for St. Johns, CA:\n');
-    console.log(data);
-});
+//  Test weather API data for St. Johns, CA
+// weather.getAllWeather(function(err, data){
+//     console.log('Displaying weather data for St. Johns, CA:\n');
+//     console.log(data);
+// });
 
 //Register an event listener to listen for file read and log event details to the console and log file
 logger.on('fileRead', (args)=>{
@@ -49,8 +53,9 @@ const server = http.createServer((req, res) => {
         // Get data from weather api AND PASS IT TO THE readFileContent FUNCTION to write to the response
         weather.getAllWeather(function(err, data){
           if (err){console.log(err); return;}
-          readFileContent(baseDir + 'index.html', res, req,logger, data);         
-          // console.log(data);
+          readFileContent(baseDir + 'index.html', res, req,logger, data);
+          // render the weather data to the console         
+          console.log(data);
       });       
         console.log('home page')
         break;
@@ -82,7 +87,7 @@ const server = http.createServer((req, res) => {
 });
 
 
-    // can use the server.on method to handle that event server.on('request', (req, res) => {
+// can use the server.on method to handle that event server.on('request', (req, res) => {
 // if the server encounters an error (if the port is already in use), the error event will be emitted
 // and retries to listen on the same port after 1 second, 
 server.on('error', (e) => {

@@ -2,18 +2,10 @@ const EventEmitter = require('events');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
-// const emitter = new EventEmitter();
-
-// function log(message) {
-//   console.log(message);
-
-//     // Raise an event
-//   emitter.emit('messageLogged', { id: 1, url: 'http://' }); //This will raise the event and call the listener
-// }
 
 // crreatiunfg a class to extend event emiiter instead of using the function above
 class Logger extends EventEmitter {
-    // create a constructor to initialize the log directory and inherit the event emitter class
+    // create a constructor to inherit the event emitter class and initialize the log directory 
     constructor() {
         super();
         this.logDirectory = path.join(__dirname, 'logs');
@@ -22,7 +14,7 @@ class Logger extends EventEmitter {
         }
     }
 
-    // create method to log daily messages to the console and create daily log files
+    // create method to log daily read actions to the console and create daily log files
 
     log(eventMeataData) {
         console.log(eventMeataData);
@@ -69,5 +61,5 @@ class Logger extends EventEmitter {
     }
 }
 
-// module.exports = log; //This will export the log function to be used in other files
-module.exports = Logger; //This will export the log function to be used in other files
+//This will export the log function to be used in other files
+module.exports = Logger; 
